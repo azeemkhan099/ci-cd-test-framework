@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.013" timestamp="2025-11-16T17:45:27.810764+01:00" hostname="azeem-khan-Laptop"><testcase classname="tests.test_validator" name="test_validation" time="0.000" /></testsuite></testsuites>
