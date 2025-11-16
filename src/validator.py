@@ -1,19 +1,22 @@
+# src/validator.py
 import json
+import os
 
 def load_data(path):
     with open(path, "r") as f:
         return json.load(f)
 
-def validate_temperature(data):
-    return all(15 <= x <= 30 for x in data["temperature"])
+def run_validations(input_data):
+    if isinstance(input_data, list):
+        data = input_data
+    elif isinstance(input_data, str) and os.path.exists(input_data):
+        data = load_data(input_data)
+    else:
+        raise ValueError("Invalid input: must be list or valid file path")
 
-def validate_pressure(data):
-    return all(0.9 <= x <= 1.1 for x in data["pressure"])
-
-def run_validations(path):
-    data = load_data(path)
-    results = {
-        "temperature_check": validate_temperature(data),
-        "pressure_check": validate_pressure(data),
-    }
-    return results
+    if not data:
+        return "No data"
+    for item in data:
+        if item is None:
+            return "Invalid data"
+    return "Valid data"
