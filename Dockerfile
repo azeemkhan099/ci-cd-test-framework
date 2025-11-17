@@ -2,21 +2,10 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-venv && \
-    rm -rf /var/lib/apt/lists/*
-
-<<<<<<< HEAD
-RUN ln -sf /usr/bin/python3 /usr/bin/python && \
-    ln -sf /usr/bin/pip3 /usr/bin/pip
+# Install Python3, pip, and venv
+RUN apt-get update && \
+    apt-get install -y python3 python3-venv python3-pip && \
+    apt-get clean
 
 USER jenkins
 
-
-=======
-# Switch back to Jenkins user
-USER jenkins
-
->>>>>>> 3e00d42 (resolve merge conflicts)
