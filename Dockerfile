@@ -8,9 +8,15 @@ RUN apt-get update && apt-get install -y \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
+<<<<<<< HEAD
 RUN ln -sf /usr/bin/python3 /usr/bin/python && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
 USER jenkins
 
 
+=======
+# Switch back to Jenkins user
+USER jenkins
+
+>>>>>>> 3e00d42 (resolve merge conflicts)
