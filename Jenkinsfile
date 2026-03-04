@@ -1,22 +1,50 @@
 pipeline {
-    agent any
+  agent {
+    dockerfile true
+  }
 
-    stages {
-        stage('Setup') {
-            steps {
-                sh 'python3 -m venv venv'
-                sh 'venv/bin/pip install -r requirements.txt'
-            }
-        }
-        stage('Run Tests') {
-            steps {
-                sh 'venv/bin/pytest --junitxml=reports/results.xml'
-            }
-        }
-        stage('Archive Results') {
-            steps {
-                archiveArtifacts artifacts: 'reports/results.xml'
-            }
-        }
+  options {
+    timestamps()
+    ansiColor('xterm')
+  }
+
+  stages {
+    stage('Sanity') {
+      steps {
+        sh 'python3 --version'
+        sh 'pip3 --version'
+      }
     }
+
+    stage('Install') {
+      steps {
+        sh 'pip3 install -r requirements.txt'
+      }
+    }
+
+    stage('Lint') {
+      steps {
+        sh 'ruff check src tests'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'pytest -q --junitxml=reports/results.xml'
+      }
+    }
+
+    stage('Publish') {
+      steps {
+        junit 'reports/results.xml'
+        archiveArtifacts artifacts: 'reports/results.xml', fingerprint: true
+      }
+    }
+  }
+
+  post {
+    always {
+      archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
+    }
+  }
 }

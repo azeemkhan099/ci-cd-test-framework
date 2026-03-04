@@ -1,11 +1,16 @@
-FROM jenkins/jenkins:lts
+FROM python:3.11-slim
 
-USER root
+WORKDIR /app
 
-# Install Python3, pip, and venv
-RUN apt-get update && \
-    apt-get install -y python3 python3-venv python3-pip && \
-    apt-get clean
+RUN python -m pip install --upgrade pip
 
-USER jenkins
+# Copy requirements first (better caching)
+COPY requirements.txt /app/requirements.txt
 
+# Install dependencies + tools used in CI
+RUN pip install -r /app/requirements.txt && pip install ruff pytest
+
+# Copy the rest of the project
+COPY . /app
+
+CMD ["pytest", "-q"]
